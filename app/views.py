@@ -1,12 +1,18 @@
 from django.core.checks import messages
 from django.shortcuts import render, redirect
+from httplib2 import Response
 from .models import Registeration
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from . import YouToob
+from urllib.parse import urlparse,parse_qs
+ 
 # Create your views here.
+
+#video_id = "-aQMjByEeo8"
 
 def Home(request):
     return render(request,'home.html')
@@ -43,9 +49,16 @@ def Login(request):
     return render(request,'login.html')
 
 
-@login_required(login_url='/login/')
 def analyser(request):
-    return render(request,'main.html')
+    Response = "This is comment"
+    if request.method=="POST":
+        vid_url = request.POST["url"]
+        url_data = urlparse(vid_url)
+        query = parse_qs(url_data.query)
+        video = query["v"][0]
+        Response = YouToob.video_comments(video)
+        Response = '\n\n'.join(Response)
+    return render(request,'main.html', {'comments': f'{Response}'})
 
 
 @login_required()
