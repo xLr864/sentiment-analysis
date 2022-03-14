@@ -54,7 +54,9 @@
     .nav-link:focus {
       color: #fff;
     }
-
+    #hide{
+      display:none;
+    }
     .navbar-toggler {
       padding: 1px 5px;
       font-size: 18px;
@@ -120,14 +122,14 @@
     <div class="row">
       <div class="col-md-6" style="margin: 0 auto;">
         <div class="form_container" style="border: 2px solid;padding: 40px 50px;align-items: center; margin:5rem auto;">
-          <form action="" method="">
+          <form action="" method="POST">{% csrf_token %}
             <h1 style="text-align: center;color: white; font-size: 28px;  ">Sentiment Analysis and Translation </h1>
 
 
             <div class="input-group mb-3" style="margin: 3rem auto;">
-              <input type="text" class="form-control" placeholder="Paste Your Video URL" aria-label="Video URL" aria-describedby="basic-addon2" style="background: none; ">
+              <input type="text" class="form-control" name='url' placeholder="Paste Your Video URL" aria-label="Video URL" aria-describedby="basic-addon2" style="background: none; ">
               <div class="input-group-append">
-                <input type="submit" class="btn btn-primary" value="Submit" 
+                <input name="submit" type="submit" class="btn btn-primary" value="Submit" 
               style="display: block;margin: 0 auto; background: none; margin-left: 30px ">
               </div>
             </div>
@@ -136,7 +138,8 @@
                 <button style="display: block; background :none; color :white "> Analysis</button>
               </div>
               <div class="col-md-4">
-                <button style="display: block; background :none ; color :white">  Translation</button>
+                 <a onclick="myFunction()" name="Trans" id="translator" type="submit"
+                 style="display: block; background :none ; color :white">  Translation</a>
               </div>
               <div class="col-md-4">
                 <button style="display: block; background :none ; color :white ">Both  </button>
@@ -145,13 +148,12 @@
               
             </div>
             <div class="form-floating" style="margin: 2rem auto;">
-              <textarea class="form-control" placeholder="Fetched comments are here" id="floatingTextarea2" style="Width : 290px; height: 180px ; margin-right:10px; background : none; color : white"></textarea>
+              <textarea class="form-control" placeholder="Fetched comments are here" id="floatingTextarea2" style="Width : 290px; height: 180px ; margin-right:10px; background : none; color : white">{% for i in comments %}{{i}}{% endfor %}</textarea>
               
             </div>
 
             <div class="form-floating" style="margin: 2rem auto;">
-              <textarea class="form-control" placeholder="Changed comments are here" id="floatingTextarea2" style="Width : 290px; height: 180px ; margin-right:10px; background : none; color : white"></textarea>
-              
+                <textarea id="hide" class="form-control" placeholder="Changed comments are here" id="floatingTextarea2" style="Width : 290px; height: 180px ; margin-right:10px; background : none; color : white">{% for i in translated_data %}{{i}}{% endfor %}</textarea>
             </div>
 
 
@@ -194,6 +196,14 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
     crossorigin="anonymous"></script>
+
+    <script>
+      function myFunction() {
+        var x = document.getElementById("hide");
+        x.style.display = "block";
+         
+      }
+      </script>
 </body>
 
 </html>

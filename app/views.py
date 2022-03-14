@@ -48,9 +48,10 @@ def Login(request):
             return redirect(Home)         
     return render(request,'login.html')
 
-
+@login_required(login_url='/login/')
 def analyser(request):
     Response = "This is comment"
+    Translated_Response = "This is translated comment"
     if request.method=="POST":
         vid_url = request.POST["url"]
         url_data = urlparse(vid_url)
@@ -58,7 +59,24 @@ def analyser(request):
         video = query["v"][0]
         Response = YouToob.video_comments(video)
         Response = '\n\n'.join(Response)
-    return render(request,'main.html', {'comments': f'{Response}'})
+        Translated_Response = YouToob.translatebaazi(Response)
+    return render(request,'main.html', {'comments': f'{Response}','translated_data':Translated_Response})
+
+
+
+
+# @login_required(login_url='/login/')
+# def Translate(request):
+#     TransResponse = "This is translated comment comment"
+#     if request.method=="POST":
+#         vid_url = request.POST["url"]
+#         url_data = urlparse(vid_url)
+#         query = parse_qs(url_data.query)
+#         video = query["v"][0]
+#         Comment = YouToob.video_comments(video)
+#         Comment = '\n\n'.join(Comment)
+#         TransResponse = YouToob.translatebaazi(Comment)
+#     return render(request,'main.html', {'translated_data': f'{TransResponse}'})
 
 
 @login_required()
